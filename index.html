@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>React Hooks</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="shower/themes/ribbon/styles/styles.css">
+  <style>
+    .shower {
+      --slide-ratio: calc(16 / 9);
+    }
+
+    .slide .shout.shout-less {
+      font-size: 100px;
+    }
+  </style>
+</head>
+
+<body class="shower list">
+
+  <header class="caption">
+    <h1>React hooks</h1>
+    <p>Kiryl Chuhainau</p>
+  </header>
+
+  <section class="slide" id="cover">
+    <h2>Реакт хуки для <br> самых маленьких</h2>
+    <p>С любовью от Чугаина Кириллова</p>
+    <figure>
+      <img class="cover" src="pictures/cover.jpg" alt="Рыболовный крюк под водой">
+    </figure>
+    <style>
+      #cover h2 {
+        margin: 200px 0 0;
+        color: navy;
+        text-align: right;
+        font-size: 70px;
+      }
+
+      #cover p {
+        margin: 10px 0 0;
+        text-align: right;
+        font-style: italic;
+        font-size: 20px;
+      }
+
+      #cover p a {
+        color: white;
+      }
+    </style>
+  </section>
+
+  <section class="slide">
+    <h2>Термины</h2>
+    <ul>
+      <li class="next">Элемент - встроенный в Реакт JS-представление тегов</li>
+      <li class="next">Компонент - пользовательская функция вовзращающая элемент</li>
+      <li class="next">Hooker - сленговое название людей с низкой социальной ответсвенностью</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">Два типа компонентов</h2>
+  </section>
+
+  <section class="slide">
+    <h2>Функциональный компонент</h2>
+    <pre>
+      <code>function MyComponent(<mark>props</mark>) {</code>
+      <code>  return &lt;h1&gt;Hello, {props.name}&lt;/h1&gt;;</code>
+      <code>};</code>
+    </pre>
+
+    <pre>
+      <code>const MyComponent = (<mark>props</mark>) => {</code>
+      <code>  return &lt;h1&gt;Hello, {props.name}&lt;/h1&gt;;</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>Class'ный компонент</h2>
+    <pre>
+      <code>class Welcome extends <mark>React.Component</mark> {</code>
+      <code>  render() {</code>
+      <code>    return &lt;h1&gt;Hello, {this.props.name}&lt;/h1&gt;;</code>
+      <code>  }</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>Различия</h2>
+    <div class="columns two">
+      <ul>
+        <b>Function</b>
+        <li class="next">Код чище и понятней</li>
+        <li class="next">Не требует компиляции</li>
+        <li class="next">Нет внутреннего состояния</li>
+      </ul>
+      <ul>
+        <b>Class</b>
+        <li class="next">Lifecycle-методы</li>
+        <li class="next">State</li>
+        <li class="next">Непонятный this</li>
+        <li class="next">Плохо минифицируются</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="slide">
+    <h2>Мотивация внедрения хуков</h2>
+    <ol>
+      <li>Предпочтение функциональных компонентов</li>
+      <li>Переиспользование логики</li>
+      <li>Переусложнённые компоненты</li>
+    </ol>
+  </section>
+
+  <section class="slide">
+    <h2>Предпочтение функциональных компонентов</h2>
+    <p>
+      Нужно понимать, как работает this. Различия между функциональными и
+      классовыми компонентами в React и тем, когда их использовать,
+      приводят к разногласиям даже между опытными React-разработчиками.
+    </p>
+    <p>
+      Например, классы плохо минифицируются, а горячая перезагрузка
+      (hot reloading) ненадёжна и часто ломает их.
+    </p>
+  </section>
+
+  <section class="slide">
+    <h2>Переиспользование логики</h2>
+    <p>
+      В реакте не было способа подключать к компонентам одинаковую логику.
+      Для переиспользования логики работы, например, со State использовались
+      различные подходы: HOC, render-props.
+    </p>
+    <p>
+      Минусом является то, что таким образом меняется структура компонентов.
+    </p>
+  </section>
+
+  <section class="slide">
+    <h2>Переусложнённые компоненты</h2>
+    <p>
+      В реакте нет возможности разбить логику на несколько Lifecycle-методов.
+      Если есть <b>ComponentDidUpdate</b>, то всё приходится писать в нём. Если
+      эта логика сложная, то появляется куча проверок.
+    </p>
+    <p>
+      Cовершенно несвязанный код в конечном итоге объединяется в один метод.
+    </p>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">React Hook — это функция</h2>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">useState</h2>
+  </section>
+
+  <section class="slide">
+    <h2>State</h2>
+    <p>State — это внутреннее состояние компонента, изменение которого вызывает перерендеривание.</p>
+  </section>
+
+  <section class="slide">
+    <h2>State</h2>
+    <div class="columns two">
+      <pre>
+        <code>constructor(props) {</code>
+        <code>  this.state = {</code>
+        <code>    value: 'string'</code>
+        <code>  };</code>
+        <code>}</code>
+        </pre>
+      <pre>
+        <code>this.setState({</code>
+        <code> value: 'asdf'</code>
+        <code>});</code>
+      </pre>
+    </div>
+  </section>
+
+  <section class="slide">
+    <h2>Особенности</h2>
+    <ol>
+      <li>Большой объект — большие проблемы</li>
+      <li>Нельзя переиспользовать логику</li>
+    </ol>
+  </section>
+
+  <section class="slide">
+    <h2>useState</h2>
+    <pre>
+      <code>function MyComponent(props) {</code>
+      <code class="mark">  const [count, setCount] = useState(0);</code>
+      <code>  const onClickHandler = () => <mark>setCount</mark>(count+1);</code>
+      <code></code>
+      <code>  return (</code>
+      <code>    &lt;h1&gt;Count = {<mark>count</mark>}&lt;/h1&gt;;</code>
+      <code>    &lt;button onClick={onClickHandler}&gt;+1&lt;/button&gt;;</code>
+      <code>)};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>useState</h2>
+    <pre>
+      <code>function MyComponent(props) {</code>
+      <code>  const [count, setCount] = useState(0);</code>
+      <code>  const [name, setName] = useState('');</code>
+      <code>  const [email, setEmail] = </code>
+      <code>    useState&lt;string | undefined&gt;(undefined);</code>
+      <code><mark>...</mark></code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">useEffect</h2>
+  </section>
+
+  <section class="slide">
+    <h2>Lifecycle методы</h2>
+    <ul>
+      <li>componentDidMount</li>
+      <li>componentDidUpdate</li>
+      <li>componentWillUnmount</li>
+    </ul>
+  </section>
+
+  <section class="slide">
+    <h2>useState</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  useState(() => {</code>
+      <code>  <mark>...</mark></code>
+      <code>  })</code>
+      <code><mark>...</mark></code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">Второй параметер</h2>
+  </section>
+
+  <section class="slide">
+    <h2>useState как componentDidMount</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  useState(() => {</code>
+      <code>  <mark>...</mark></code>
+      <code>  }, [])</code>
+      <code><mark>...</mark></code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>useState как componentDidUpdate</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  useState(() => {</code>
+      <code>  <mark>...</mark></code>
+      <code>  })</code>
+      <code><mark>...</mark></code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>useState как componentDidUpdate</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  useState(() => {</code>
+      <code>  <mark>...</mark></code>
+      <code>  }, [props.name])</code>
+      <code><mark>...</mark></code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>useState как componentWillUnmount</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  useState(() => {</code>
+      <code class="mark">    return () => {...}</code>
+      <code>  })</code>
+      <code><mark>...</mark></code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>useState как componentWillUnmount</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  const [count, setCount] = useState(0);</code>
+      <code>  useState(() => {}, [])</code>
+      <code>  useState(() => {}, [props.name])</code>
+      <code>  useState(() => {}, [count])</code>
+      <code><mark>...</mark></code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">Теперь наш компонент — функция</h2>
+  </section>
+
+  <section class="slide">
+    <h2>Где ошибка?</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code> const myHandler = () => {};  </code>
+      <code> return &lt;MyComponent onChange={myHandler} /&gt;</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">useCallback</h2>
+  </section>
+
+  <section class="slide">
+    <h2>useCallback</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code class="mark"> const myHandler = useCallback(() => {}, []);</code>
+      <code> return &lt;MyComponent onChange={myHandler} /&gt;</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>useCallback</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  const [count, setCount] = useState(0);</code>
+      <code class="mark"> const myHandler = useCallback(() => {}, [count]);</code>
+      <code> return &lt;MyComponent onChange={myHandler} /&gt;</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">useMemo</h2>
+  </section>
+
+  <section class="slide">
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  const [name, setName] = useState('');</code>
+      <code>  const [lastname, setLastname] = useState('');</code>
+      <code>  const myValue = useMemo(() => {</code>
+      <code class="mark">    return `${name} ${lastname}`</code>
+      <code>  }, [name, lastname]);</code>
+      <code></code>
+      <code> return &lt;MyComponent fullname={myValue} /&gt;</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2 class="shout shout-less">Пользовательские хуки</h2>
+  </section>
+
+  <section class="slide">
+    <pre id="code1">
+      <code>const MyComponent = (props) => {</code>
+      <code>  const [value, setValue] = useState('');</code>
+      <code>  const [result, setResult] = useState(null);</code>
+      <code>  useEffect(() => {</code>
+      <code>    const value = getValue();</code>
+      <code>    setValue(value);</code>
+      <code>  }, []);</code>
+      <code>  const myValue = useEffect(() => {</code>
+      <code>    const result = hardFunc(value);</code>
+      <code>    setResult(result);</code>
+      <code>  }, [value]);</code>
+      <code>};</code>
+    </pre>
+    <style>
+      #code1 {
+        font-size: 18px;
+      }
+    </style>
+  </section>
+
+  <section class="slide">
+    <pre id="code2">
+      <code>const useResult = () => {</code>
+      <code>  const [value, setValue] = useState('');</code>
+      <code>  const [result, setResult] = useState(null);</code>
+      <code>  useEffect(() => {</code>
+      <code>    const value = getValue();</code>
+      <code>    setValue(value);</code>
+      <code>  }, []);</code>
+      <code>  const myValue = useEffect(() => {</code>
+      <code>    const result = hardFunc(value);</code>
+      <code>    setResult(result);</code>
+      <code>  }, [value]);</code>
+      <code>  return [setValue, result];</code>
+      <code>};</code>
+    </pre>
+    <style>
+      #code2 {
+        font-size: 18px;
+      }
+    </style>
+  </section>
+
+  <section class="slide">
+    <h2>Итог</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  const [updateFunc, result] = useResult();</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>Особенности</h2>
+    <ol>
+      <li class="next">useCallback, useEffect не работают с async</li>
+      <li class="next">Вызываются только из функционального компонента и без условий</li>
+    </ol>
+  </section>
+
+  <section class="slide">
+    <h2>Нельзя</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  if (predicate) {</code>
+      <code>    const [value, setValue] = useState(null);</code>
+      <code>  }</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide">
+    <h2>Особенности</h2>
+    <ol>
+      <li>useCallback, useEffect не работают с async</li>
+      <li>Вызываются только из функционального компонента и без условий</li>
+      <li class="next">getDerivedStateFromProps ???</li>
+    </ol>
+  </section>
+
+  <section class="slide">
+    <h2>Можно</h2>
+    <pre>
+      <code>const MyComponent = (props) => {</code>
+      <code>  const [value, setValue] = useState(null);</code>
+      <code>  if (predicate) {</code>
+      <code>    setValue('sss')</code>
+      <code>  }</code>
+      <code>};</code>
+    </pre>
+  </section>
+
+  <section class="slide" id="picture">
+    <figure>
+      <img class="cover" src="pictures/finish.jpg" alt="I have spoken">
+    </figure>
+    <style>
+      #picture {
+        background-color: black;
+      }
+
+      #picture img {
+        width: 100%;
+      }
+    </style>
+  </section>
+
+  <div class="progress"></div>
+
+  <script src="shower/shower.min.js"></script>
+
+</body>
+
+</html>
